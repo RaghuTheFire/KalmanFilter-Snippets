@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <Eigen/Dense>
-#include <matplotlib/matplotlib.h>
+#include "matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
 
