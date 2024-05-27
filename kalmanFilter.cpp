@@ -5,7 +5,6 @@
 #include "matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
-
 using namespace Eigen;
 
 class KalmanFilter 
@@ -17,7 +16,7 @@ class KalmanFilter
           dt = time_resolution;
   
           // Define the state transition matrix F
-          F = MatrixXd::Identity(n, n);
+          F = Eigen::MatrixXd::Identity(n, n);
           for (int i = 1; i < n; i++) 
           {
               F(i - 1, i) = dt;
@@ -28,36 +27,36 @@ class KalmanFilter
           }
   
           // Define the control matrix B (optional)
-          B = MatrixXd::Zero(n, 1);
+          B = Eigen::MatrixXd::Zero(n, 1);
   
           // Define the initial state estimate and covariance matrix
-          x = VectorXd::Zero(n);
-          P = MatrixXd::Identity(n, n);
+          x = Eigen::MatrixXd::Zero(n, 1);
+          P = Eigen::MatrixXd::Identity(n, n);
   
           // Process noise covariance matrix (Q) and measurement noise covariance matrix (R)
-          Q = MatrixXd::Identity(n, n);
-          R = MatrixXd::Identity(n, n);
+          Q = Eigen::MatrixXd::Identity(n, n);
+          R = Eigen::MatrixXd::Identity(n, n);
   
           // Define measurement matrix H
-          H = MatrixXd::Identity(n, n);
+          H = Eigen::MatrixXd::Identity(n, n);
       }
   
-      VectorXd predict(const VectorXd& u = VectorXd::Zero(1)) 
+      Eigen::MatrixXd predict(const Eigen::MatrixXd& u = Eigen::MatrixXd::Zero(1, 1)) 
       {
           x = F * x + B * u;
           P = F * P * F.transpose() + Q;
           return x;
       }
   
-      std::pair<VectorXd, MatrixXd> update(const VectorXd& z) 
+      std::pair<Eigen::MatrixXd, Eigen::MatrixXd> update(const Eigen::MatrixXd& z) 
       {
-          assert(z.size() == n);
-          VectorXd y = z - H * x;
-          MatrixXd S = H * P * H.transpose() + R;
-          MatrixXd K = P * H.transpose() * S.inverse();
+          assert(z.rows() == n);
+          Eigen::MatrixXd y = z - H * x;
+          Eigen::MatrixXd S = H * P * H.transpose() + R;
+          Eigen::MatrixXd K = P * H.transpose() * S.inverse();
   
           x = x + K * y;
-          P = (MatrixXd::Identity(n, n) - K * H) * P;
+          P = (Eigen::MatrixXd::Identity(n, n) - K * H) * P;
   
           return std::make_pair(x, P);
       }
@@ -65,8 +64,7 @@ class KalmanFilter
   private:
       int n;
       double dt;
-      MatrixXd F, B, P, Q, R, H;
-      VectorXd x;
+      Eigen::MatrixXd F, B, x, P, Q, R, H;
 };
 
 int main() 
@@ -74,24 +72,24 @@ int main()
     KalmanFilter kf;
 
     // Simulate some data
-    VectorXd true_state(3);
+    Eigen::MatrixXd true_state(3, 1);
     true_state << 0, 1, 0.1;
-    std::vector<VectorXd> measurements;
-    std::vector<VectorXd> predicted_states;
+    std::vector<Eigen::MatrixXd> measurements;
+    std::vector<Eigen::MatrixXd> predicted_states;
 
     for (int t = 0; t < 10; t++) 
     {
         // Simulate measurement
-        VectorXd measurement = true_state + VectorXd::Random(3);
+        Eigen::MatrixXd measurement = true_state + Eigen::MatrixXd::Random(3, 1);
         measurements.push_back(measurement);
 
         // Predict step
         kf.predict();
 
         // Update step
-        VectorXd estimated_state;
-        MatrixXd estimated_covariance;
-        std::tie(estimated_state, estimated_covariance) = kf.update(measurement);
+        Eigen::MatrixXd estimated_state;
+        Eigen::MatrixXd cov;
+        std::tie(estimated_state, cov) = kf.update(measurement);
         predicted_states.push_back(estimated_state);
 
         // Update true state (for simulation purposes)
@@ -103,17 +101,17 @@ int main()
     for (int i = 0; i < 3; i++) 
     {
         plt::subplot(3, 1, i + 1);
-        std::vector<double> measurement_values, prediction_values;
+        std::vector<double> meas_data, pred_data;
         for (const auto& m : measurements) 
         {
-            measurement_values.push_back(m(i));
+            meas_data.push_back(m(i));
         }
         for (const auto& p : predicted_states) 
         {
-            prediction_values.push_back(p(i));
+            pred_data.push_back(p(i));
         }
-        plt::plot(measurement_values, "r-", {{"label", "Measurements"}});
-        plt::plot(prediction_values, "b-", {{"label", "Kalman Filter Prediction"}});
+        plt::plot(meas_data, "r-", "Measurements");
+        plt::plot(pred_data, "b-", "Kalman Filter Prediction");
         plt::legend();
     }
     plt::show();
