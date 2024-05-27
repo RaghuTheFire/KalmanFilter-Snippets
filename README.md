@@ -40,10 +40,9 @@ The Kalman Filter is implemented in c++ and is designed to handle a state vector
 
 1. Run the `kalman_filter.cpp` script to see the Kalman Filter in action:
 
-   ```bash
  g++ kalman_filter.cpp -std=c++11 -I /usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/include/python3.7m 
  -I /usr/local/lib/python3.7/site-packages/numpy/core/include -L /usr/local/Cellar/python/3.7.3/Frameworks/Python.framework/Versions/3.7/lib -lpython3.7
-   ```
+
 2. The script will simulate some sensor data, process it using the Kalman Filter, and display the results.
 
 ## Output
