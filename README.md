@@ -53,22 +53,6 @@ The output will include plots of the measurements and the Kalman Filter predicti
 
 ## Explanation
 
-### Kalman Filter Class
-
-The `KalmanFilter` class implements the Kalman Filter algorithm. It includes methods for initialization, prediction, and update.
-
-- **Initialization (`__init__`)**: Sets up the state transition matrix `F`, control matrix `B`, initial state estimate `x`, covariance matrix `P`, process noise covariance `Q`, measurement noise covariance `R`, and measurement matrix `H`.
-- **Prediction (`predict`)**: Computes the predicted state estimate and covariance matrix based on the state transition matrix and control input.
-- **Update (`update`)**: Updates the state estimate and covariance matrix using the measurement vector `z`.
-
-### Main Script
-
-The main script demonstrates the usage of the `KalmanFilter` class by simulating some sensor data and processing it using the filter. It plots the measurements and the filter's predictions for comparison.
-
-- **Simulated Data**: The script simulates a true state vector and adds noise to generate measurements.
-- **Kalman Filter Processing**: The filter processes the measurements to provide estimates of the true state.
-- **Plotting Results**: The results are plotted to visualize the filter's performance.
-
 
 ## References
 
