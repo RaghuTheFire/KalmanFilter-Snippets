@@ -50,6 +50,7 @@ The Kalman Filter is implemented in c++ and is designed to handle a state vector
 The output will include plots of the measurements and the Kalman Filter predictions for each component of the state vector.
 
 ![Kalman Filter Output](plots/Figure_1.png)
+![kalmanfilter](https://github.com/user-attachments/assets/474f2c1f-1013-4fa1-9b27-c916e19a4c75)
 
 ## Explanation
 
