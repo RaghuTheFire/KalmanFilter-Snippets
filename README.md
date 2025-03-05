@@ -29,7 +29,7 @@ The Kalman Filter is implemented in c++ and is designed to handle a state vector
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/raghunihal/kalman-filter.git
+   git clone https://github.com/RaghuTheFire/kalman-filter.git
    cd kalman-filter
    ```
 2. Install the required packages:
